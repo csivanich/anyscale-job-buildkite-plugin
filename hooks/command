@@ -30,6 +30,17 @@ fi
 
 echo "~~~ Installing Anyscale CLI"
 pip3 install -U anyscale
+ANYSCALE="/var/lib/buildkite-agent/.local/bin/anyscale"
+
+if [[ ! -f "$ANYSCALE" ]];then
+    fail "Cannot find Anyscale CLI post-install"
+fi
+
+anyscale(){
+    "$ANYSCALE" "$@"
+}
+
+anyscale --version
 
 echo "~~~ Running Anyscale Job"
 anyscale job submit \
