@@ -1,3 +1,30 @@
 #!/usr/bin/env bash
 
-env | grep ANYSCALE_JOB
+set -euo pipefail
+
+fail(){
+    "ERROR: $*"
+    exit 1
+}
+
+PREFIX="BUILDKITE_PLUGIN_ANYSCALE_JOB_"
+env | grep "$PREFIX"
+
+file="$BUILDKITE_PLUGIN_ANYSCALE_JOB_FILE"
+name="$BUILDKITE_PLUGIN_ANYSCALE_JOB_NAME"
+description="$BUILDKITE_PLUGIN_ANYSCALE_JOB_DESCRIPTION"
+
+if [[ -z "$file" ]];then
+    fail "Missing 'file' property"
+fi
+
+cat "$file"
+
+if [[ -n "$name" ]];then
+    echo "$name"
+fi
+
+if [[ -n "$description" ]];then
+    echo "$description"
+fi
+
