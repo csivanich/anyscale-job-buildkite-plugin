@@ -28,17 +28,26 @@ if [[ -n "$description" ]];then
     echo "$description"
 fi
 
-echo "~~~ Installing Anyscale CLI"
-pip3 install -U anyscale
-export PATH="/var/lib/buildkite-agent/.local/bin/:$PATH"
+job_submit_local(){
+    echo "~~~ :anyscale: Installing CLI"
+    pip3 install -U anyscale
+    export PATH="/var/lib/buildkite-agent/.local/bin/:$PATH"
 
-if ! anyscale --version;then
-    fail "Cannot find Anyscale CLI post-install"
-fi
+    if ! anyscale --version;then
+        fail "Cannot find Anyscale CLI post-install"
+    fi
 
-echo "~~~ Running Anyscale Job"
-anyscale job submit \
-    --wait \
-    --name "$name" \
-    --description "$description" \
-    -f "$file"
+    echo "~~~ :anyscale: Running Job"
+    anyscale job submit \
+        --wait \
+        --name "$name" \
+        --description "$description" \
+        -f "$file"
+}
+
+job_submit_docker(){
+    echo "~~~ :anyscale: Pulling Image"
+    docker pull anyscale/ray
+}
+
+job_submit_docker
