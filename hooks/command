@@ -28,3 +28,4 @@ if [[ -n "$description" ]];then
     echo "$description"
 fi
 
+pip install -U anyscale
