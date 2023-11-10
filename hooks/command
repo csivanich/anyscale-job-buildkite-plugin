@@ -50,7 +50,7 @@ job_submit_docker(){
         -it \
         --entrypoint bash \
         -v "$file":/tmp/job.yaml \
-        -- \
+        anyscale/ray \
         anyscale job submit \
             --wait \
             --name "$name" \
