@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+echo "~~~ :anyscale: Pulling Image"
+docker pull anyscale/ray
