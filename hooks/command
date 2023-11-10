@@ -46,8 +46,16 @@ job_submit_local(){
 }
 
 job_submit_docker(){
-    echo "~~~ :anyscale: Pulling Image"
-    docker pull anyscale/ray
+    docker run \
+        -it \
+        --entrypoint bash \
+        -v "$file":/tmp/job.yaml \
+        -- \
+        anyscale job submit \
+            --wait \
+            --name "$name" \
+            --description "$description" \
+            -f "/tmp/job.yaml"
 }
 
 job_submit_docker
