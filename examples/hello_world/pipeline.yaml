@@ -1,0 +1,13 @@
+steps:
+  - name: ":anyscale: hello world"
+    timeout: 10
+    plugins:
+      - seek-oss/aws-sm#v2.3.1:
+          file:
+            - path: "/tmp/token.txt"
+              secret-id: "anyscale_cli_token"
+      - csivanich/anyscale-job#dev:
+          credentials_file: "/tmp/token.txt"
+          file: "job.yaml"
+          name: "test job"
+          description: "testing plugin"

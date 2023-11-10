@@ -1,0 +1,60 @@
+name: Anyscale Job Runner
+description: Runs Anyscale Job in a pipeline
+author: https://github.com/csivanich/anyscale-job-buildkite-plugin
+requirements: ["docker"]
+configuration: #XXX: needs to be changed
+  type: object
+  properties:
+    name:
+      type: string
+    project_id:
+      type: string
+    compute_config:
+      oneOf:
+        - type: string
+        - type: object
+          properties:
+            cloud_id:
+              type: string
+            region:
+              type: string
+            head_node_type:
+              type: object
+              properties:
+                name:
+                  type: string
+                instance_type:
+                  type: string
+            worker_node_types:
+              type: array
+              items: {}
+    cluster_env:
+      type: string
+    runtime_env:
+      type: object
+      properties:
+        working_dir:
+          type: string
+        pip:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        env_vars:
+          type: object
+          additionalProperties:
+            type: string
+    entrypoint:
+      type: string
+    max_retries:
+      type: integer
+  required:
+    - name
+    - project_id
+    - compute_config
+    - cluster_env
+    - runtime_env
+    - entrypoint
+    - max_retries
+
