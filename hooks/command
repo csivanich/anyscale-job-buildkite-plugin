@@ -52,10 +52,10 @@ job_submit_local(){
 job_submit_docker(){
     docker run \
         -it \
-        --entrypoint bash \
+        --entrypoint anyscale \
         -v "$(pwd)":/job \
         anyscale/ray \
-        anyscale job submit \
+        job submit \
             --wait \
             --name "$name" \
             --description "$description" \
