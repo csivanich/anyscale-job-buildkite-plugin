@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
+    set -x
+fi
+
 set -euo pipefail
 
 fail(){
