@@ -28,4 +28,12 @@ if [[ -n "$description" ]];then
     echo "$description"
 fi
 
+echo "~~~ Installing Anyscale CLI"
 pip3 install -U anyscale
+
+echo "~~~ Running Anyscale Job"
+anyscale job submit \
+    --wait \
+    --name "$name" \
+    --description "$description" \
+    -f "$file"
