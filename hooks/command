@@ -47,14 +47,14 @@ if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
     set -x
 fi
 
-echo "--- :anyscale: Running Job $name"
+echo "+++ :anyscale: Running Job $name"
 docker run \
     -it \
     -e ANYSCALE_HOST=https://console.anyscale.com \
     -e ANYSCALE_CLI_TOKEN \
     --entrypoint anyscale \
     -v "$WORKING_DIR":/job \
-    anyscale/ray \
+    "$BUILDKITE_PLUGIN_ANYSCALE_JOB_IMAGE" \
     job submit \
         --wait \
         --follow \
