@@ -53,6 +53,7 @@ job_submit_docker(){
     docker run \
         -it \
         -e ANYSCALE_HOST=https://console.anyscale.com \
+        -e ANYSCALE_CLI_TOKEN \
         --entrypoint anyscale \
         -v "$(pwd)":/job \
         -v "$CREDENTIALS_FILE:/home/ray/anyscale/.credentials.json" \
@@ -77,6 +78,7 @@ check_credentials(){
     docker run \
         -it \
         -e ANYSCALE_HOST=https://console.anyscale.com \
+        -e ANYSCALE_CLI_TOKEN \
         --entrypoint anyscale \
         -v "$CREDENTIALS_FILE:/home/ray/.anyscale/credentials.json" \
         anyscale/ray \
@@ -91,7 +93,13 @@ if [[ -z "$CREDENTIALS_FILE" ]];then
     login_docker
 else
     test -r "$CREDENTIALS_FILE" || fail "Could not read credentials file: $CREDENTIALS_FILE"
-    check_credentials
+    if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
+        set +x
+    fi
+    ANYSCALE_CLI_TOKEN="$(cat $CREDENTIALS_FILE)"
+    if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
+        set -x
+    fi
 fi
 
 echo "--- :anyscale: Running Job"
