@@ -78,7 +78,7 @@ check_credentials(){
         -it \
         -e ANYSCALE_HOST=https://console.anyscale.com \
         --entrypoint anyscale \
-        -v "$CREDENTIALS_FILE:/home/ray/anyscale/.credentials.json" \
+        -v "$CREDENTIALS_FILE:/home/ray/.anyscale/credentials.json" \
         anyscale/ray \
         cloud list
 }
