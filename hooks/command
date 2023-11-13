@@ -62,4 +62,24 @@ job_submit_docker(){
             -f "/job/$file"
 }
 
+login_docker(){
+    docker run \
+        -it \
+        --entrypoint anyscale \
+        -v "$(pwd)":/job \
+        anyscale/ray \
+        login
+}
+
+echo "~~~ Loading credentials"
+CREDENTIALS_FILE="${BUILDKITE_PLUGIN_ANYSCALE_JOB_CREDENTIALS_FILE:-}"
+
+if [[ -z "$CREDENTIALS_FILE" ]];then
+    echo "+++ Login using this link"
+    login_docker
+else
+    test -r "$CREDENTIALS_FILE" || fail "Could not read credentials file: $CREDENTIALS_FILE"
+fi
+
+echo "--- :anyscale: Running Job"
 job_submit_docker
