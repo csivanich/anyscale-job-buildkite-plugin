@@ -52,6 +52,8 @@ job_submit_local(){
 job_submit_docker(){
     docker run \
         -it \
+        -e ANYSCALE_HOST=https://console.anyscale.com \
+        -e ANYSCALE_CLI_TOKEN \
         --entrypoint anyscale \
         -v "$(pwd)":/job \
         anyscale/ray \
@@ -79,6 +81,8 @@ if [[ -z "$CREDENTIALS_FILE" ]];then
     login_docker
 else
     test -r "$CREDENTIALS_FILE" || fail "Could not read credentials file: $CREDENTIALS_FILE"
+    ANYSCALE_CLI_TOKEN="$(cat "$CREDENTIALS_FILE")"
+    export ANYSCALE_CLI_TOKEN
 fi
 
 echo "--- :anyscale: Running Job"
