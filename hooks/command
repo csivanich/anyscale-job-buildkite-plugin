@@ -11,6 +11,7 @@ fail(){
     exit 1
 }
 
+WORKING_DIR="${WORKING_DIR:-(pwd)}"
 PREFIX="BUILDKITE_PLUGIN_ANYSCALE_JOB_"
 env | grep "$PREFIX"
 
@@ -55,10 +56,11 @@ job_submit_docker(){
         -e ANYSCALE_HOST=https://console.anyscale.com \
         -e ANYSCALE_CLI_TOKEN \
         --entrypoint anyscale \
-        -v "$(pwd)":/job \
+        -v "$WORKING_DIR":/job \
         anyscale/ray \
         job submit \
             --wait \
+            --follow \
             --name "$name" \
             --description "$description" \
             -f "/job/$file"
@@ -68,7 +70,7 @@ login_docker(){
     docker run \
         -it \
         --entrypoint anyscale \
-        -v "$(pwd)":/job \
+        -v "$WORKING_DIR":/job \
         anyscale/ray \
         login
 }
