@@ -1,14 +1,18 @@
 # anyscale-job-buildkite-plugin
-Buildkite Plugin for running Anyscale Job in a pipeline
+Buildkite Plugin for running Anyscale Jobs in a pipeline
 
-# TODO:
+# Overview
 
-- Figure out hook type (command?)
-- Figure out configuration options
-- Figure out how it'd be used
+This plugin runs Anyscale Jobs in Buildkite using Anyscale's CLI. It uses pipeline-defined credentials and job configuration.
 
-# IDEA
+# Usage
 
-```
+| Property | Description | Required |
+|----------|-------------|----------|
+| credentials_file | Path to file which holds Anyscale token value | YES |
+| debug | If set, runs with higher verbosity | NO |
+| description | Description to give job | YES |
+| file | Path to file with Anyscale Job definition | YES |
+| name | Name to give job | YES |
 
-```
+

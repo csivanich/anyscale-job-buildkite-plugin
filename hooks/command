@@ -33,75 +33,31 @@ if [[ -n "$description" ]];then
     echo "$description"
 fi
 
-job_submit_local(){
-    echo "~~~ :anyscale: Installing CLI"
-    pip3 install -U anyscale
-    export PATH="/var/lib/buildkite-agent/.local/bin/:$PATH"
-
-    if ! anyscale --version;then
-        fail "Cannot find Anyscale CLI post-install"
-    fi
-
-    echo "~~~ :anyscale: Running Job"
-    anyscale job submit \
-        --wait \
-        --name "$name" \
-        --description "$description" \
-        -f "$file"
-}
-
-job_submit_docker(){
-    docker run \
-        -it \
-        -e ANYSCALE_HOST=https://console.anyscale.com \
-        -e ANYSCALE_CLI_TOKEN \
-        --entrypoint anyscale \
-        -v "$WORKING_DIR":/job \
-        anyscale/ray \
-        job submit \
-            --wait \
-            --follow \
-            --name "$name" \
-            --description "$description" \
-            -f "/job/$file"
-}
-
-login_docker(){
-    docker run \
-        -it \
-        --entrypoint anyscale \
-        -v "$WORKING_DIR":/job \
-        anyscale/ray \
-        login
-}
-
-check_credentials(){
-    docker run \
-        -it \
-        -e ANYSCALE_HOST=https://console.anyscale.com \
-        -e ANYSCALE_CLI_TOKEN \
-        --entrypoint anyscale \
-        anyscale/ray \
-        cloud list
-}
 
 echo "~~~ Loading credentials"
 CREDENTIALS_FILE="${BUILDKITE_PLUGIN_ANYSCALE_JOB_CREDENTIALS_FILE:-}"
 
-if [[ -z "$CREDENTIALS_FILE" ]];then
-    echo "+++ Login using this link"
-    login_docker
-else
-    test -r "$CREDENTIALS_FILE" || fail "Could not read credentials file: $CREDENTIALS_FILE"
-    if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
-        set +x
-    fi
-    ANYSCALE_CLI_TOKEN="$(cat "$CREDENTIALS_FILE")"
-    export ANYSCALE_CLI_TOKEN
-    if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
-        set -x
-    fi
+test -r "$CREDENTIALS_FILE" || fail "Could not read credentials file: $CREDENTIALS_FILE"
+if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
+    set +x
+fi
+ANYSCALE_CLI_TOKEN="$(cat "$CREDENTIALS_FILE")"
+export ANYSCALE_CLI_TOKEN
+if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
+    set -x
 fi
 
-echo "--- :anyscale: Running Job"
-job_submit_docker
+echo "--- :anyscale: Running Job $name"
+docker run \
+    -it \
+    -e ANYSCALE_HOST=https://console.anyscale.com \
+    -e ANYSCALE_CLI_TOKEN \
+    --entrypoint anyscale \
+    -v "$WORKING_DIR":/job \
+    anyscale/ray \
+    job submit \
+        --wait \
+        --follow \
+        --name "$name" \
+        --description "$description" \
+        -f "/job/$file"

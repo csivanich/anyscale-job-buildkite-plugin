@@ -1,9 +1,8 @@
 name: Anyscale Job Runner
 description: Runs Anyscale Job in a pipeline
 author: https://github.com/csivanich/anyscale-job-buildkite-plugin
-requirements: []
-configuration:
-  # BUILDKITE_PLUGIN_ANYSCALE_JOB_<CONFIGURATION_PROPERTY>=<VALUE>
+requirements: ["docker"]
+configuration: #XXX: needs to be changed
   type: object
   properties:
     name:
