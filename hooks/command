@@ -11,7 +11,7 @@ fail(){
     exit 1
 }
 
-WORKING_DIR="${WORKING_DIR:-(pwd)}"
+WORKING_DIR="${WORKING_DIR:-$(pwd)}"
 PREFIX="BUILDKITE_PLUGIN_ANYSCALE_JOB_"
 env | grep "$PREFIX"
 

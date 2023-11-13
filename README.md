@@ -14,5 +14,6 @@ This plugin runs Anyscale Jobs in Buildkite using Anyscale's CLI. It uses pipeli
 | description | Description to give job | YES |
 | file | Path to file with Anyscale Job definition | YES |
 | name | Name to give job | YES |
+| image | 
 
 
