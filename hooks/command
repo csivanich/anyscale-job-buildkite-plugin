@@ -33,18 +33,8 @@ if [[ -n "$description" ]];then
     echo "$description"
 fi
 
-
-echo "~~~ Loading credentials"
-CREDENTIALS_FILE="${BUILDKITE_PLUGIN_ANYSCALE_JOB_CREDENTIALS_FILE:-}"
-
-test -r "$CREDENTIALS_FILE" || fail "Could not read credentials file: $CREDENTIALS_FILE"
-if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
-    set +x
-fi
-ANYSCALE_CLI_TOKEN="$(cat "$CREDENTIALS_FILE")"
-export ANYSCALE_CLI_TOKEN
-if [[ -n "$BUILDKITE_PLUGIN_ANYSCALE_JOB_DEBUG" ]];then
-    set -x
+if [[ -z "${ANYSCALE_CLI_TOKEN:-}" ]];then
+    fail "'ANYSCALE_CLI_TOKEN' environment variable is missing or empty - have you tried the anyscale-credentials-buildkite-plugin?"
 fi
 
 echo "+++ :anyscale: Running Job $name"
